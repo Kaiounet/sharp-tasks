@@ -7,8 +7,4 @@
     <RootNamespace>sharp_tasks</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers/" />
-  </ItemGroup>
-
 </Project>
