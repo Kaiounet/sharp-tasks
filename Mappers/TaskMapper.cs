@@ -15,4 +15,21 @@ public class TaskMapper
         };
 
     }
+
+    public static List<TaskDisplayVM> GetTaskDisplayVMsFromTasks(List<Models.Task> tasks)
+    {
+        List<TaskDisplayVM> taskDisplayVMs = new List<TaskDisplayVM>();
+        foreach (Models.Task task in tasks)
+        {
+            TaskDisplayVM taskDisplayVM = new TaskDisplayVM
+            {
+                Label = task.Label,
+                Description = task.Description,
+                LimiteDate = task.LimiteDate,
+                TaskState = task.TaskState
+            };
+            taskDisplayVMs.Add(taskDisplayVM);
+        }
+        return taskDisplayVMs;
+    }
 }

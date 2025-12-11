@@ -1,8 +1,59 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-@{
-    ViewData["Title"] = "Index";
-}
+@using sharp_tasks.Enums
 
-<h1>Task Index</h1>
+<h1>You have created @ViewBag.tasks.Count tasks</h1>
+
+@if (ViewBag.tasks != null && ViewBag.tasks.Count > 0)
+{
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Label</th>
+                <th>Description</th>
+                <th>Limit Date</th>
+                <th>State</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in ViewBag.tasks)
+            {
+                <tr>
+                    <td>@task.Label</td>
+                    <td>@task.Description</td>
+                    <td>@task.LimiteDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        @{
+                            var stateClass = "";
+                            var stateText = "";
+
+                            switch (task.TaskState)
+                            {
+                                case State.TODO:
+                                    stateClass = "badge bg-secondary";
+                                    stateText = "To Do";
+                                    break;
+                                case State.IN_PROGRESS:
+                                    stateClass = "badge bg-primary";
+                                    stateText = "In Progress";
+                                    break;
+                                case State.DONE:
+                                    stateClass = "badge bg-success";
+                                    stateText = "Done";
+                                    break;
+                            }
+                        }
+                        <span class="@stateClass">@stateText</span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        No tasks found. <a href="@Url.Action("Add", "Tasks")" class="alert-link">Create your first task</a>.
+    </div>
+}

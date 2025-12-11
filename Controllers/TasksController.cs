@@ -17,6 +17,9 @@ public class TasksController : Controller
 
     public IActionResult Index()
     {
+        List<Models.Task> tasks = _sessionManager.Get<List<Models.Task>>("tasks");
+        List<TaskDisplayVM> taskDisplayVMs = TaskMapper.GetTaskDisplayVMsFromTasks(tasks);
+        ViewBag.tasks = taskDisplayVMs;
         return View();
     }
 
