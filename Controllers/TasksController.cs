@@ -28,26 +28,19 @@ public class TasksController : Controller
     [HttpPost]
     public IActionResult Add(TaskAddVM model)
     {
+        Models.Task task;
+        List<Models.Task> tasks;
+
         if (!ModelState.IsValid)
         {
             return View();
         }
 
-        List<Models.Task> tasks;
+        task = TaskMapper.GetTaskFromTaskAddVM(model);
+        tasks = _sessionManager.Get<List<Models.Task>>("tasks");
 
-        if (HttpContext.Session.GetString("Tasks") == null)
-        {
-            tasks = new List<Models.Task>();
-        }
-        else
-        {
-            tasks = JsonSerializer.Deserialize<List<Models.Task>>(HttpContext.Session.GetString("Tasks"));
-        }
-
-        Models.Task task = TaskMapper.GetTaskFromTaskAddVM(model);
         tasks.Add(task);
-
-        _sessionManager.Add("Tasks", tasks);
+        _sessionManager.Add("tasks", tasks);
 
         return RedirectToAction(nameof(Index));
     }

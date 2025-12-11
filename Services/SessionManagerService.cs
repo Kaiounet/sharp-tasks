@@ -17,4 +17,10 @@ public class SessionManagerService : ISessionManagerService
         var httpContext = _httpContextAccessor.HttpContext;
         httpContext.Session.SetString(key, JsonSerializer.Serialize(value));
     }
+
+    public T Get<T>(string key)
+    {
+        var httpContext = _httpContextAccessor.HttpContext;
+        return JsonSerializer.Deserialize<T>(httpContext.Session.GetString(key) ?? "[]");
+    }
 }
