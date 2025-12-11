@@ -32,4 +32,16 @@ public class TaskMapper
         }
         return taskDisplayVMs;
     }
+
+    public static TaskEditVM GetTaskEditVMFromTask(Models.Task task)
+    {
+        return new TaskEditVM
+        {
+            Label = task.Label,
+            Description = task.Description,
+            LimiteDate = task.LimiteDate,
+            TaskState = task.TaskState
+        };
+    }
+
 }

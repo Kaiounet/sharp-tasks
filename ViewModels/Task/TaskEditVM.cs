@@ -1,11 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using sharp_tasks.Enums;
 using sharp_tasks.Validation;
 
 namespace sharp_tasks.ViewModels.Task;
 
-public class TaskAddVM
+public class TaskEditVM
 {
     [Required(ErrorMessage = "The label is required")]
     public string? Label { get; set; }
@@ -17,4 +16,5 @@ public class TaskAddVM
     public DateTime LimiteDate { get; set; }
     [Required(ErrorMessage = "The state is required")]
     public State TaskState { get; set; }
+
 }
