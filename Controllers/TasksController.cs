@@ -1,30 +1,54 @@
 using Microsoft.AspNetCore.Mvc;
+using sharp_tasks.Mappers;
+using sharp_tasks.Services;
 using sharp_tasks.ViewModels.Task;
+using System.Text.Json;
 
-namespace sharp_tasks.Controllers
+namespace sharp_tasks.Controllers;
+
+public class TasksController : Controller
 {
-    public class TasksController : Controller
+    private readonly ISessionManagerService _sessionManager;
+
+    public TasksController(ISessionManagerService sessionManager)
     {
-        public IActionResult Index()
+        _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));
+    }
+
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    public IActionResult Add()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Add(TaskAddVM model)
+    {
+        if (!ModelState.IsValid)
         {
             return View();
         }
 
-        public IActionResult Add()
+        List<Models.Task> tasks;
+
+        if (HttpContext.Session.GetString("Tasks") == null)
         {
-            return View();
+            tasks = new List<Models.Task>();
+        }
+        else
+        {
+            tasks = JsonSerializer.Deserialize<List<Models.Task>>(HttpContext.Session.GetString("Tasks"));
         }
 
-        [HttpPost]
-        public IActionResult Add(TaskAddVM model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
+        Models.Task task = TaskMapper.GetTaskFromTaskAddVM(model);
+        tasks.Add(task);
 
-            return RedirectToAction(nameof(Index));
-        }
+        _sessionManager.Add("Tasks", tasks);
 
+        return RedirectToAction(nameof(Index));
     }
 }
