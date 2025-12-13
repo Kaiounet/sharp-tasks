@@ -3,18 +3,18 @@ using sharp_tasks.Models;
 
 namespace sharp_tasks.Services;
 
-public class AuthentificationService : IAuthentificationService
+public class AuthenticationService : IAuthenticationProvider
 {
     private readonly ISessionManagerService _sessionManager;
 
-    public AuthentificationService(ISessionManagerService sessionManager)
+    public AuthenticationService(ISessionManagerService sessionManager)
     {
         _sessionManager = sessionManager;
     }
 
-    public bool Authentificate(Login model)
+    public bool AuthenticateUser(Login model)
     {
-        if (IsAuthentificated()) { return true; }
+        if (IsAuthenticated()) { return true; }
 
         if (model.Username.Equals(new string(model.Password.Reverse().ToArray())))
         {
@@ -25,7 +25,7 @@ public class AuthentificationService : IAuthentificationService
         return false;
     }
 
-    public bool IsAuthentificated()
+    public bool IsAuthenticated()
     {
         return _sessionManager.Get<string>("isAuth") != null;
     }

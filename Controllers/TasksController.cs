@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace sharp_tasks.Controllers;
 
-[TypeFilter(typeof(AuthentificationFilter))]
+[TypeFilter(typeof(AuthenticationFilter))]
 public class TasksController : Controller
 {
     private readonly ISessionManagerService _sessionManager;

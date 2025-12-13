@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ISessionManagerService, SessionManagerService>();
-builder.Services.AddScoped<IAuthentificationService, AuthentificationService>();
-builder.Services.AddScoped<AuthentificationFilter>();
+builder.Services.AddScoped<IAuthenticationProvider, AuthenticationService>();
+builder.Services.AddScoped<AuthenticationFilter>();
 builder.Services.AddSession();
 
 var app = builder.Build();

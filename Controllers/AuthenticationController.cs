@@ -6,23 +6,32 @@ using sharp_tasks.Mappers;
 
 namespace sharp_tasks.Controllers
 {
-    public class AuthentificationController : Controller
+    public class AuthenticationController : Controller
     {
-        private readonly IAuthentificationService _authentificationService;
+        private readonly IAuthenticationProvider _authenticationService;
 
-        public AuthentificationController(IAuthentificationService authentificationService)
+        public AuthenticationController(IAuthenticationProvider authenticationService)
         {
-            _authentificationService = authentificationService;
+            _authenticationService = authenticationService;
         }
 
         public IActionResult Login()
         {
+            if (_authenticationService.IsAuthenticated())
+            {
+                return RedirectToAction(nameof(Index), "Tasks");
+            }
             return View();
         }
 
         [HttpPost]
         public IActionResult Login(LoginVM model)
         {
+            if (_authenticationService.IsAuthenticated())
+            {
+                return RedirectToAction(nameof(Index), "Tasks");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -30,7 +39,7 @@ namespace sharp_tasks.Controllers
 
             Models.Login login = LoginMapper.GetLoginFromLoginVM(model);
 
-            if (!_authentificationService.Authentificate(login))
+            if (!_authenticationService.AuthenticateUser(login))
             {
                 ViewBag.loginError = true;
                 return View(model);
@@ -39,10 +48,10 @@ namespace sharp_tasks.Controllers
             return RedirectToAction(nameof(Index), "Tasks");
         }
 
-        [TypeFilter(typeof(AuthentificationFilter))]
+        [TypeFilter(typeof(AuthenticationFilter))]
         public IActionResult Logout()
         {
-            _authentificationService.Logout();
+            _authenticationService.Logout();
             return RedirectToAction(nameof(Login));
         }
     }
